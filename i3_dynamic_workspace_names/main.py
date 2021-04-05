@@ -1,4 +1,5 @@
 from i3ipc import Connection, Event
+from i3ipc.events import WindowEvent
 
 from i3_dynamic_workspace_names.configuration import dynamic_workspace_names, rename_rule, RenameRule
 
@@ -9,7 +10,7 @@ def start():
     def _allow_dynamic_change(ws):
         return ws.num in dynamic_workspace_names
 
-    def _on_window_move(connection, e):
+    def _on_window_move(connection: Connection, e: WindowEvent):
         target_ws = i3.get_tree().find_by_id(e.container.id).workspace()
         _rename_workspace(target_ws)
 
@@ -18,7 +19,7 @@ def start():
         focused_window = i3.get_tree().find_focused()
         _rename_workspace(focused_window.workspace())
 
-    def _on_window_change(connection, e):
+    def _on_window_change(connection: Connection, e: WindowEvent):
         visible_workspaces = [ws for ws in i3.get_workspaces() if ws.focused is True]
         focused_window = i3.get_tree().find_focused()
         for ws in visible_workspaces:
