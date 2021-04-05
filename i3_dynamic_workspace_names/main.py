@@ -23,9 +23,9 @@ def start():
         visible_workspaces = [ws for ws in i3.get_workspaces() if ws.focused is True]
         focused_window = i3.get_tree().find_focused()
         for ws in visible_workspaces:
-            if e.ipc_data['change'] == 'new':
+            if e.change == 'new':
                 _rename_workspace(ws)
-            elif e.ipc_data['change'] == 'close':
+            elif e.change == 'close':
                 if focused_window is None:
                     return
 
