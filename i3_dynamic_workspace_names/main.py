@@ -15,6 +15,10 @@ def start():
             workspace = e.current
             update_workspace_name(workspace)
 
+    def _on_window_move(self, e):
+        target_ws = i3.get_tree().find_by_id(e.container.id).workspace()
+        _rename_workspace(target_ws, e.container.window_class)
+
     def _on_window_change(self, e):
         visible_workspaces = [ws for ws in i3.get_workspaces() if ws.focused is True]
         focused_window = i3.get_tree().find_focused()
@@ -44,7 +48,7 @@ def start():
     def _rename_workspace(workspace, window_class):
         if _allow_dynamic_change(workspace):
             ws_name = "%s:%s" % (workspace.num, window_class)
-            i3.command('rename workspace to "%s"' % ws_name.lower())
+            i3.command(f'rename workspace "{workspace.name}" to "{ws_name.lower()}"')
 
     # Define a callback to be called when you switch workspaces.
     def update_workspace_name(workspace):
@@ -63,6 +67,7 @@ def start():
     i3.on(Event.WORKSPACE_FOCUS, _on_ws_change)
     i3.on(Event.WINDOW_NEW, _on_window_change)
     i3.on(Event.WINDOW_CLOSE, _on_window_change)
+    i3.on(Event.WINDOW_MOVE, _on_window_move)
     # i3.on(Event.WINDOW_FOCUS, on_window_focus)
 
     # Start the main loop and wait for events to come in.
