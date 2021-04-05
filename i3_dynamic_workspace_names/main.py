@@ -16,8 +16,8 @@ def start():
 
         # Refresh the active workspace's name too since we could have moved the
         # naming window out of it
-        focused_window = i3.get_tree().find_focused()
-        _rename_workspace(focused_window.workspace())
+        current_workspace = i3.get_tree().find_focused().workspace()
+        _rename_workspace(current_workspace)
 
     def _on_window_change(connection: Connection, e: WindowEvent):
         visible_workspaces = [ws for ws in i3.get_workspaces() if ws.focused is True]
@@ -33,12 +33,12 @@ def start():
                     # The window was the last one open and workspace is empty
                     _rename_workspace(ws)
                 else:
-                    # The other window is still open so use it to set the workspace name
+                    # There is other window still open so use it to set the workspace name
                     _rename_workspace(ws)
 
     def _rename_workspace(workspace):
+        window_class_to_use = 'empty'
         if rename_rule == RenameRule.FIRST_WINDOW:
-            window_class_to_use = 'empty'
             ws_container_tree = i3.get_tree().find_named(workspace.name)
             first_window = _find_first_container_with_class(ws_container_tree[0])
             if first_window is not None:
