@@ -1,6 +1,6 @@
 from i3ipc import Connection, Event
 
-from i3_dynamic_workspace_names.configuration import dynamic_workspace_names
+from i3_dynamic_workspace_names.configuration import dynamic_workspace_names, rename_rule, RenameRule
 
 
 def start():
@@ -35,10 +35,31 @@ def start():
                     # The other window is still open so use it to set the workspace name
                     _rename_workspace(ws, focused_window.window_class)
 
-    def _rename_workspace(workspace, window_class):
+    def _rename_workspace(workspace, related_window_class):
+        if rename_rule == RenameRule.LATEST_WINDOW:
+            window_class_to_use = related_window_class
+        elif rename_rule == RenameRule.FIRST_WINDOW:
+            window_class_to_use = related_window_class
+            ws_container_tree = i3.get_tree().find_named(workspace.name)
+            first_window = _find_first_container_with_class(ws_container_tree[0])
+            if first_window is not None:
+                window_class_to_use = first_window.window_class
+
         if _allow_dynamic_change(workspace):
-            ws_name = "%s:%s" % (workspace.num, window_class)
+            ws_name = "%s:%s" % (workspace.num, window_class_to_use)
             i3.command(f'rename workspace "{workspace.name}" to "{ws_name.lower()}"')
+
+    def _find_first_container_with_class(container_tree):
+        """
+        Note that the "first" in this implementation is the depth first search!
+        Figure out later if breadth first search would make more sense or make it configurable...
+        """
+        for node in container_tree.nodes:
+            if node.window_class is not None:
+                return node
+            else:
+                return _find_first_container_with_class(node)
+        return None
 
     # Define a callback to be called when you switch workspaces.
     def update_workspace_name(workspace):
@@ -54,7 +75,7 @@ def start():
         i3.command('rename workspace to "%s"' % ws_name)
 
     # Subscribe to events
-    i3.on(Event.WORKSPACE_FOCUS, _on_ws_change)
+    # i3.on(Event.WORKSPACE_FOCUS, _on_ws_change)
     i3.on(Event.WINDOW_NEW, _on_window_change)
     i3.on(Event.WINDOW_CLOSE, _on_window_change)
     i3.on(Event.WINDOW_MOVE, _on_window_move)
