@@ -1,14 +1,13 @@
 from i3ipc import Connection, Event
 
+from i3_dynamic_workspace_names.configuration import dynamic_workspace_names
+
 
 def start():
     i3 = Connection()
 
-    # Workspaces which have dynamically changing icons.
-    _dynamic_workspace_names = [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
-
     def _allow_dynamic_change(ws):
-        return ws.num in _dynamic_workspace_names
+        return ws.num in dynamic_workspace_names
 
     def _on_ws_change(self, e):
         if e.current:

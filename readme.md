@@ -57,9 +57,9 @@ exec_always --no-startup-id i3-dynamic-workspace-names
 
 ## Configuration
 You can define the indexes of workspaces which should be dynamically 
-renamed by editing the list in the main.py:
+renamed by editing the list in the configuration.py:
 ```
-    _dynamic_workspace_names = [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+    dynamic_workspace_names = [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
 ```
 To apply changes, run 
 ```
