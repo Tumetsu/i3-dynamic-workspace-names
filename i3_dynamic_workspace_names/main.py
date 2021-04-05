@@ -16,37 +16,40 @@ def start():
 
     def _on_window_move(self, e):
         target_ws = i3.get_tree().find_by_id(e.container.id).workspace()
-        _rename_workspace(target_ws, e.container.window_class)
+        _rename_workspace(target_ws)
+
+        # Refresh the active workspace's name too since we could have moved the
+        # naming window out of it
+        focused_window = i3.get_tree().find_focused()
+        _rename_workspace(focused_window.workspace())
 
     def _on_window_change(self, e):
         visible_workspaces = [ws for ws in i3.get_workspaces() if ws.focused is True]
         focused_window = i3.get_tree().find_focused()
         for ws in visible_workspaces:
             if e.ipc_data['change'] == 'new':
-                _rename_workspace(ws, e.ipc_data['container']['window_properties']['class'])
+                _rename_workspace(ws)
             elif e.ipc_data['change'] == 'close':
                 if focused_window is None:
                     return
 
                 if focused_window.type == 'workspace':
                     # The window was the last one open and workspace is empty
-                    _rename_workspace(ws, 'empty')
+                    _rename_workspace(ws)
                 else:
                     # The other window is still open so use it to set the workspace name
-                    _rename_workspace(ws, focused_window.window_class)
+                    _rename_workspace(ws)
 
-    def _rename_workspace(workspace, related_window_class):
-        if rename_rule == RenameRule.LATEST_WINDOW:
-            window_class_to_use = related_window_class
-        elif rename_rule == RenameRule.FIRST_WINDOW:
-            window_class_to_use = related_window_class
+    def _rename_workspace(workspace):
+        if rename_rule == RenameRule.FIRST_WINDOW:
+            window_class_to_use = 'empty'
             ws_container_tree = i3.get_tree().find_named(workspace.name)
             first_window = _find_first_container_with_class(ws_container_tree[0])
             if first_window is not None:
                 window_class_to_use = first_window.window_class
 
         if _allow_dynamic_change(workspace):
-            ws_name = "%s:%s" % (workspace.num, window_class_to_use)
+            ws_name = f'{workspace.num}:{window_class_to_use}'
             i3.command(f'rename workspace "{workspace.name}" to "{ws_name.lower()}"')
 
     def _find_first_container_with_class(container_tree):
