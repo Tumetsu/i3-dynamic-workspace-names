@@ -2,7 +2,10 @@
 
 This Python script listens i3 ipc messages and 
 dynamically changes the names of the workspaces
-to the lowercase variant of one window in the workspace.
+to the lowercase variant of one window in the workspace prefixed by
+workspace index.
+For example by moving Gnome terminal to the workspace `7` the workspace
+will be renamed to `7:gnome-terminal`
 
 This functionality can then be used e.g. in Polybar
 to display custom icons for workspaces based on opened
