@@ -35,15 +35,6 @@ def start():
                     # The other window is still open so use it to set the workspace name
                     _rename_workspace(ws, focused_window.window_class)
 
-    def _get_current_workspace(container):
-        active_window = i3.get_tree().find_by_window(container.id)
-        if active_window is not None:
-            current_ws = i3.get_tree().find_by_id(container.id).workspace()
-        else:
-            current_ws = None
-
-        return current_ws
-
     def _rename_workspace(workspace, window_class):
         if _allow_dynamic_change(workspace):
             ws_name = "%s:%s" % (workspace.num, window_class)
