@@ -10,22 +10,6 @@ def start():
     def _allow_dynamic_change(ws):
         return ws.num in _dynamic_workspace_names
 
-    def _find_focused(node):
-        """
-        Recursively find the focused window or workspace from the i3 tree.
-        :param node: 
-        :return: 
-        """
-        for child in node.nodes:
-            if child.focused is True:
-                return child
-
-            focused_child = _find_focused(child)
-            if focused_child is not None:
-                return focused_child
-
-        return None
-
     def _on_ws_change(self, e):
         if e.current:
             workspace = e.current
@@ -33,7 +17,7 @@ def start():
 
     def _on_window_change(self, e):
         visible_workspaces = [ws for ws in i3.get_workspaces() if ws.focused is True]
-        focused_window = _find_focused(i3.get_tree())
+        focused_window = i3.get_tree().find_focused()
         for ws in visible_workspaces:
             if e.ipc_data['change'] == 'new':
                 _rename_workspace(ws, e.ipc_data['container']['window_properties']['class'])
