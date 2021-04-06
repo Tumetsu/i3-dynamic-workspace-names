@@ -1,14 +1,14 @@
 from i3ipc import Connection, Event
 from i3ipc.events import WindowEvent
 
-from i3_dynamic_workspace_names.configuration import dynamic_workspace_names, rename_rule, RenameRule
+from i3_dynamic_workspace_names.configuration import RenameRule, DynamicWorkspaceNamesConfig, load_configuration_file
 
 
-def start():
+def start(config: DynamicWorkspaceNamesConfig):
     i3 = Connection()
 
     def _allow_dynamic_change(ws):
-        return ws.num in dynamic_workspace_names
+        return ws.num in config.dynamic_workspace_names
 
     def _on_window_move(connection: Connection, e: WindowEvent):
         target_ws = i3.get_tree().find_by_id(e.container.id).workspace()
@@ -38,7 +38,7 @@ def start():
 
     def _rename_workspace(workspace):
         window_class_to_use = 'empty'
-        if rename_rule == RenameRule.FIRST_WINDOW:
+        if config.rename_rule == RenameRule.FIRST_WINDOW:
             ws_container_tree = i3.get_tree().find_named(workspace.name)
             first_window = _find_first_container_with_class(ws_container_tree[0])
             if first_window is not None:
@@ -70,4 +70,4 @@ def start():
 
 
 if __name__ == '__main__':
-    start()
+    start(load_configuration_file(None))

@@ -1,5 +1,16 @@
 #!/usr/bin/env python3
+import argparse
+import sys
+import pkg_resources
+
+from i3_dynamic_workspace_names.configuration import load_configuration_file
 from i3_dynamic_workspace_names.main import start
 
+parser = argparse.ArgumentParser(description='Dynamically rename i3 workspaces based on windows')
+parser.add_argument('-c', '--config', type=str, nargs=1, help='Path to the configuration file')
 if __name__ == '__main__':
-    start()
+    arguments = sys.argv[1:]
+    parsed_args = parser.parse_args(arguments)
+
+    config = load_configuration_file(parsed_args.config)
+    start(config)
