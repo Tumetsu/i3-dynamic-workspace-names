@@ -39,8 +39,9 @@ def start(config: DynamicWorkspaceNamesConfig):
     def _rename_workspace(workspace):
         window_class_to_use = 'empty'
         if config.rename_rule == RenameRule.FIRST_WINDOW:
-            ws_container_tree = i3.get_tree().find_named(workspace.name)
-            first_window = _find_first_container_with_class(ws_container_tree[0])
+            # Use id from ipc_data since it is not directly available in WorkspaceReply
+            ws_container_tree = i3.get_tree().find_by_id(workspace.ipc_data['id'])
+            first_window = _find_first_container_with_class(ws_container_tree)
             if first_window is not None:
                 window_class_to_use = first_window.window_class
 
@@ -57,7 +58,9 @@ def start(config: DynamicWorkspaceNamesConfig):
             if node.window_class is not None:
                 return node
             else:
-                return _find_first_container_with_class(node)
+                result = _find_first_container_with_class(node)
+                if result is not None:
+                    return result
         return None
 
     # Subscribe to events
