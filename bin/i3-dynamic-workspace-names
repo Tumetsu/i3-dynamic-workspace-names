@@ -8,9 +8,15 @@ from i3_dynamic_workspace_names.main import start
 
 parser = argparse.ArgumentParser(description='Dynamically rename i3 workspaces based on windows')
 parser.add_argument('-c', '--config', type=str, nargs=1, help='Path to the configuration file')
+parser.add_argument('-v', '--version', help='Display version information', action='store_true')
+
 if __name__ == '__main__':
     arguments = sys.argv[1:]
     parsed_args = parser.parse_args(arguments)
 
-    config = load_configuration_file(parsed_args.config)
-    start(config)
+    if parsed_args.version is True:
+        version = pkg_resources.require('i3-dynamic-workspace-names')[0].version
+        print(f'Version: {version}')
+    else:
+        config = load_configuration_file(parsed_args.config)
+        start(config)
