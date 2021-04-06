@@ -52,16 +52,19 @@ i3-dynamic-workspace-names
 but preferably you should add the following to your i3 
 config:
 ```
-exec_always --no-startup-id i3-dynamic-workspace-names
+exec_always --no-startup-id i3-dynamic-workspace-names -c <path to config file>
 ```
 
 ## Configuration
-You can define the indexes of workspaces which should be dynamically 
-renamed by editing the list in the configuration.py:
+You can define settings by configuring them to the config file and starting the
+application by:
 ```
-    dynamic_workspace_names = [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+i3-dynamic-workspace-names -c <path to config file>
 ```
-To apply changes, run 
+
+Supported configuration options:
 ```
-pip3 install .
+[Behavior]
+; Indexes of workspaces which should be named dynamically
+DynamicWorkspaceIndexes = [1, 2, 3]
 ```
