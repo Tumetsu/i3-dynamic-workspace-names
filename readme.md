@@ -38,9 +38,17 @@ ws-icon-default = 
 ```
 
 ## Install
-Clone the repository and in root run:
+
+### Pip
 ```
 pip3 install .
+```
+
+### Arch/Pacman
+```
+cd dist/
+makepkg
+sudo pacman -U *.tar.zst
 ```
 
 ## How to run

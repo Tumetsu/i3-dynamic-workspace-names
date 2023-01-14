@@ -117,7 +117,6 @@ __pycache__/
 .Python
 build/
 develop-eggs/
-dist/
 downloads/
 eggs/
 .eggs/
@@ -246,4 +245,8 @@ dmypy.json
 
 .idea/
 
+dist/i3-dynamic-workspace-names
+dist/*.tar.zst
+dist/pkg/
+dist/src/
 # End of https://www.toptal.com/developers/gitignore/api/python,pycharm

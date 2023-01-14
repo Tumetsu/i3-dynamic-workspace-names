@@ -1,0 +1,16 @@
+# Maintainer: Tuomas Salmi <salmi.tuomas@gmail.com>
+pkgname=i3-dynamic-workspace-names-git
+pkgver=0.1
+pkgrel=1
+pkgdesc="Set i3 workspace names dynamically based on windows in the workspace"
+arch=('any')
+url="https://github.com/Tumetsu/i3-dynamic-workspace-names"
+license=('MIT')
+source=("git+https://github.com/Tumetsu/i3-dynamic-workspace-names.git")
+md5sums=("SKIP")
+
+package() {
+	cd "i3-dynamic-workspace-names"
+	python setup.py install --root="$pkgdir"
+}
+
