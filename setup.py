@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='i3-dynamic-workspace-names',
-      version='0.1',
+      version='0.2',
       description='Set i3 workspace names dynamically based on windows in the workspace',
       author='Tuomas Salmi',
       license='MIT',
