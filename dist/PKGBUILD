@@ -6,11 +6,13 @@ pkgdesc="Set i3 workspace names dynamically based on windows in the workspace"
 arch=('any')
 url="https://github.com/Tumetsu/i3-dynamic-workspace-names"
 license=('MIT')
+depends=('python' 'python-i3ipc' 'python-xlib' 'python-six')
+makedepends=('git' 'python-setuptools')
 source=("git+https://github.com/Tumetsu/i3-dynamic-workspace-names.git")
 md5sums=("SKIP")
 
 package() {
 	cd "i3-dynamic-workspace-names"
-	python setup.py install --root="$pkgdir"
+	python setup.py install --root="$pkgdir" --optimize=1
 }
 

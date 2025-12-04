@@ -46,6 +46,8 @@ pip3 install .
 
 ### Arch/Pacman
 ```
+sudo pacman -S python-setuptools python-i3ipc python-xlib python-six
+
 cd dist/
 makepkg
 sudo pacman -U *.tar.zst
